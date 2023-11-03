@@ -33,6 +33,18 @@ int print_char(char ch, int x, int y, char attr) {
         vidmem[offset + 1] = attr;
         offset += 2;
     }
+
+    if(offset >= VGA_MEM_MAX) {
+        for(int i = 1; i < MAX_ROWS; i++)
+            memcpy(get_offset(0, i - 1) + VGA_MEM, get_offset(0, i) + VGA_MEM, MAX_COLS * 2);
+
+        char* bottomline = get_offset(0, MAX_ROWS - 1) + VGA_MEM;
+        for(int i = 0; i < MAX_COLS * 2; i++)
+            bottomline[i] = 0;
+        
+        offset -= 2 * MAX_COLS;
+    }
+
     set_cursor_offset(offset);
     return offset;
 }
