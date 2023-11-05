@@ -2,14 +2,17 @@ CSRC = $(shell find . | grep -F .c)
 SSRC = $(shell find . | grep -F kernel.asm)
 OBJ = $(SSRC:.asm=.o) $(CSRC:.c=.o)
 
-CC = gcc
-LD = ld
+CROSS_PATH = $(shell echo ~/opt/cross/bin/)
+TARGET = i386-elf
 
-CCFLAGS = -m32 -c -ffreestanding -fno-stack-protector
+CC = ${CROSS_PATH}/${TARGET}-gcc
+LD = ${CROSS_PATH}/${TARGET}-ld
+
+CCFLAGS = -m32 -c -ffreestanding -fno-stack-protector -I./std
 LDFLAGS = -m elf_i386 -T $(shell find . | grep -F link.ld)
 
 check:
-	echo ${CSRC}
+	echo ${CROSS_PATH}
 
 %.o: %.c
 	${CC} ${CCFLAGS} $< -o $@
