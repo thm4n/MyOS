@@ -8,8 +8,8 @@ TARGET = i386-elf
 CC = ${CROSS_PATH}/${TARGET}-gcc
 LD = ${CROSS_PATH}/${TARGET}-ld
 
-CCFLAGS = -m32 -c -ffreestanding -fno-stack-protector -I./std
-LDFLAGS = -m elf_i386 -T $(shell find . | grep -F link.ld)
+CCFLAGS = -nostdlib -lk -lgcc -m32 -c -ffreestanding -fno-stack-protector -I./ -I./libc/include/
+LDFLAGS = -nostdlib -lk -lgcc -m elf_i386 -T $(shell find . | grep -F link.ld)
 
 check:
 	echo ${CROSS_PATH}
