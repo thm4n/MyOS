@@ -1,5 +1,7 @@
 #include "kernel.h"
 
+void idt_init();
+
 void kmain(void) {
 	clear_screen();
 

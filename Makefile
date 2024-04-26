@@ -23,6 +23,12 @@ check:
 kernel.bin: ${OBJ}
 	${LD} ${LDFLAGS} $^ -o $@
 
+rebuild: clean kernel.bin
+
+build: kernel.bin
+
+rerun: clean kernel.bin
+
 run: kernel.bin
 	qemu-system-i386 -kernel $<
 
