@@ -1,3 +1,2 @@
-./bin/*
-kernel.bin
+./bin/
 .vscode
