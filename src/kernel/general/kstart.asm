@@ -17,8 +17,8 @@ extern kmain	        ;kmain is defined in the c file
 extern keyboard_handler_main
 
 ;%include 'kernel/general/portIO.asm'
-%include 'kernel/general/load_idt.asm'
-%include 'kernel/general/dev_handler.asm'
+%include 'src/kernel/general/load_idt.asm'
+%include 'src/kernel/general/dev_handler.asm'
 
 start:
   cli 			;block interrupts
