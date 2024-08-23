@@ -1,7 +1,7 @@
 #ifndef _IDT_H_
 #define _IDT_H_
 
-#include "../drivers/keyboard.h"
+#include "kernel/drivers/keyboard.h"
 
 #define IDT_SIZE 256
 

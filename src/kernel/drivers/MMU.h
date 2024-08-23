@@ -1,7 +1,7 @@
 #ifndef _MMU_H_
 #define _MMU_H_
 
-#include <stdint.h>
+#include "stdint.h"
 
 extern uint32_t endkernel;
 

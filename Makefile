@@ -13,7 +13,7 @@ TARGET_ARCH := i386-elf
 CC = ${CROSS_PATH}/${TARGET_ARCH}-gcc
 LD := ${CROSS_PATH}/${TARGET_ARCH}-ld
 
-CC_INC_FLAGS = -I./src
+CC_INC_FLAGS = -I./src -I./src/libc -I./src/std
 
 CCFLAGS := -m32 -c -ffreestanding -fno-stack-protector $(CC_INC_FLAGS)
 LDFLAGS := -m elf_i386 -T $(shell find . -name "link.ld")

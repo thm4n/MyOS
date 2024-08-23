@@ -1,8 +1,8 @@
 #ifndef _SCREEN_H_
 #define _SCREEN_H_
 
-#include <string.h>
-#include "../general/ports.h"
+#include "string.h"
+#include "kernel/general/ports.h"
 
 #define VGA_MEM (char*)0xB8000
 #define MAX_COLS 80
