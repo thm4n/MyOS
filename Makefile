@@ -1,45 +1,50 @@
 BIN_DIR := ./bin
 SRC_DIR := ./src
 
-ASM_SRC    := $(shell find . -name "kernel.asm")
-C_SRC    := $(shell find . -name "*.c")
+ASM_SRC    := $(shell find ./src -name "kstart.asm")
+C_SRC    := $(shell find ./src -name "*.c")
 
-ASM_OBJ   := $(ASM_SRC:.asm=.o)
-C_OBJ     := $(C_SRC:.c=.o)
+ASM_OBJ   := $(patsubst $(SRC_DIR)/%.asm,$(BIN_DIR)/%.o,$(ASM_SRC))
+C_OBJ   := $(patsubst $(SRC_DIR)/%.c,$(BIN_DIR)/%.o,$(C_SRC))
 
-ASM_OBJ_FILES := $(patsubst $(SRC_DIR)/%.asm,$(BIN_DIR)/%.o,$(ASM_OBJ))
-C_OBJ_FILES   := $(patsubst $(SRC_DIR)/%.c,$(BIN_DIR)/%.o,$(C_OBJ))
-
-CROSS_PATH  := $(shell echo ~/opt/cross/bin/)
+CROSS_PATH  := /opt/cross/bin
 TARGET_ARCH := i386-elf
 
-CC := ${CROSS_PATH}/${TARGET_ARCH}-gcc
+CC = ${CROSS_PATH}/${TARGET_ARCH}-gcc
 LD := ${CROSS_PATH}/${TARGET_ARCH}-ld
 
-CCFLAGS := -m32 -c -ffreestanding -fno-stack-protector -I./std
+CC_INC_FLAGS = -I./src
+
+CCFLAGS := -m32 -c -ffreestanding -fno-stack-protector $(CC_INC_FLAGS)
 LDFLAGS := -m elf_i386 -T $(shell find . -name "link.ld")
 
-check:
-	echo ${CROSS_PATH}
+TARGET := $(BIN_DIR)/kstart.bin
 
-%.o: %.c
+$(BIN_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(dir $@)
 	${CC} ${CCFLAGS} $< -o $@
 
-%.o: %.asm
+$(BIN_DIR)/%.o: $(SRC_DIR)/%.asm
+	@mkdir -p $(dir $@)
 	nasm -f elf32 $< -o $@
 
-kernel.bin: ${OBJ}
+test:
+	@echo ${C_SRC}
+	@echo ${C_OBJ}
+
+$(BIN_DIR)/%.bin: ${C_OBJ} $(ASM_OBJ)
 	${LD} ${LDFLAGS} $^ -o $@
 
-rebuild: clean kernel.bin
+rebuild: clean $(TARGET)
 
-build: kernel.bin
+build: $(TARGET)
+	@echo "created $<"
 
-rerun: clean kernel.bin
+rerun: clean $(TARGET)
 
-run: kernel.bin
+run: $(TARGET)
 	qemu-system-i386 -kernel $<
 
 clean:
-	rm -f ${shell find . -name "*.o"}
-	rm -f kernel.bin
+	rm -rf ./bin/*
+	rm -f $(TARGET)
